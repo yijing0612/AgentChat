@@ -1,5 +1,5 @@
 # 🧠 AgentChat
-An agent with PDF Q&amp;A support, web search, Wikipedia tools, and multi-turn memory. Built using LangChain, OpenAI, Gradio, and FAISS.
+An agent with PDF Q&A support, AI web search, Wikipedia tools, and multi-turn memory. Built using LangChain, OpenAI, Gradio, and FAISS.
 
 🚀 Features
 
@@ -15,7 +15,8 @@ An agent with PDF Q&amp;A support, web search, Wikipedia tools, and multi-turn m
 
 ![image](https://github.com/user-attachments/assets/62a8db52-1162-41d7-8c4d-5450b4ed8c38)  
 
-![image](https://github.com/user-attachments/assets/d7bd6f94-9542-4680-aa4a-65d954cbdd53)  
+<img width="604" alt="image" src="https://github.com/user-attachments/assets/75914e72-f1ba-4cd1-97d6-03076495a4d8" />
+
 
 🧪 Example Use Cases
 

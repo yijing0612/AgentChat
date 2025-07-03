@@ -6,45 +6,21 @@ chat_history = []
 pdf_loaded = False
 
 
+
 def handle_query(user_input):
     global pdf_loaded
 
     if user_input.strip().lower() == "exit":
         return chatbox.update(value=chatbox.value + "\n\n👋 Goodbye!"), ""
 
-    # Run either PDF QA or research agent
     if pdf_loaded:
-        response = chat_with_pdf(user_input)
+        response = chat_with_pdf(user_input, fallback_agent=run_research_agent)
     else:
-        response = run_research_agent(user_input)
+        response = run_research_agent(user_input).get("summary", "")
 
-    # Update chat history for rendering
     chat_history.append(("User", user_input))
-    if isinstance(response, dict):
-        summary = response.get("summary", "")
-        sources = response.get("sources", [])
-        tools = response.get("tools_used", [])
+    chat_history.append(("Assistant", response))
 
-        sources_html = ""
-        if sources:
-            sources_html += "<div style='font-size: 0.85em; color: gray;'>Sources: " + ", ".join(
-                f"<span style='background-color:#e0e0e0; padding: 2px 6px; border-radius: 6px;'>{s}</span>"
-                for s in sources
-            ) + "</div>"
-
-        tools_html = ""
-        if tools:
-            tools_html += "<div style='font-size: 0.85em; color: gray;'>Tools: " + ", ".join(
-                f"<span style='background-color:#d0f0d0; padding: 2px 6px; border-radius: 6px;'>{t}</span>"
-                for t in tools
-            ) + "</div>"
-
-        full_response = summary + sources_html + tools_html
-        chat_history.append(("Assistant", full_response))
-    else:
-        chat_history.append(("Assistant", response))
-
-    # Format like ChatGPT
     formatted = ""
     for speaker, msg in chat_history:
         if speaker == "User":
@@ -53,7 +29,6 @@ def handle_query(user_input):
             formatted += f"<div style='text-align: left; margin: 8px; background-color: #f2f2f2; padding: 8px; border-radius: 10px;'><strong>{speaker}:</strong> {msg}</div>"
 
     return gr.update(value=formatted, visible=True), ""
-
 
 def handle_file_upload(file):
     global pdf_loaded

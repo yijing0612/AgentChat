@@ -4,13 +4,12 @@ from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain_openai import ChatOpenAI
-from main import run_research_agent
 
 qa_chain = None
-pdf_qa_chain = None
+retriever = None
 
 def load_pdf(file_path):
-    global qa_chain
+    global qa_chain, retriever
     loader = PyPDFLoader(file_path)
     docs = loader.load()
 
@@ -21,25 +20,24 @@ def load_pdf(file_path):
     vectorstore = FAISS.from_documents(chunks, embeddings)
 
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 3})
-    global pdf_qa_chain
-    pdf_qa_chain = RetrievalQA.from_chain_type(llm=ChatOpenAI(), retriever=retriever)
-    return "✅ PDF loaded and processed."
+    qa_chain = RetrievalQA.from_chain_type(llm=ChatOpenAI(), retriever=retriever)
+    return "PDF loaded and processed."
 
-def chat_with_pdf(query):
-    global pdf_qa_chain
-    if not pdf_qa_chain:
-        return "❌ No PDF loaded yet."
+def chat_with_pdf(query, fallback_agent=None):
+    """
+    Attempts to answer using PDF content first. Falls back to agent if no good PDF answer.
+    """
+    if not qa_chain:
+        return "No PDF is currently loaded."
 
-    # Step 1: Try answering from the PDF
-    pdf_answer = pdf_qa_chain.run(query)
+    pdf_answer = qa_chain.run(query).strip()
 
-    # Step 2: Check if the answer is too vague or unhelpful
-    if not pdf_answer or len(pdf_answer.strip()) < 30:
-        agent_result = run_research_agent(query)
-        return f"{agent_result['summary']} (From tools)"
-
-    # PDF answer seems useful — try both
-    agent_result = run_research_agent(query)
-    return f"{pdf_answer}\n\n🔍 Additional info:\n{agent_result['summary']}"
+    # Heuristic to decide if fallback is needed
+    if not pdf_answer or len(pdf_answer.split()) < 5 or "I need" in pdf_answer or "please provide" in pdf_answer:
+        if fallback_agent:
+            agent_result = fallback_agent(query)
+            return agent_result.get("summary", "[No valid answer found]")
+        else:
+            return "Couldn't get a good answer from PDF."
 
     return pdf_answer

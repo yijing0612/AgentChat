@@ -10,13 +10,7 @@ An agent with PDF Q&A support, AI web search, Wikipedia tools, and multi-turn me
 💾 Session History — Keeps track of each session’s dialogue
 
 📸 Demo
-
-![image](https://github.com/user-attachments/assets/669c93b5-a3b6-4c2d-a72f-da69d0033f66)  <br>
-
-![image](https://github.com/user-attachments/assets/62a8db52-1162-41d7-8c4d-5450b4ed8c38)   <br> 
-
-<img width="604" alt="image" src="https://github.com/user-attachments/assets/75914e72-f1ba-4cd1-97d6-03076495a4d8" />  <br>
-
+<div align="center" style="margin-bottom: 20px;"> <img src="https://github.com/user-attachments/assets/669c93b5-a3b6-4c2d-a72f-da69d0033f66" width="600" style="margin: 20px 0;" /> </div> <div align="center" style="margin-bottom: 20px;"> <img src="https://github.com/user-attachments/assets/62a8db52-1162-41d7-8c4d-5450b4ed8c38" width="600" style="margin: 20px 0;" /> </div> <div align="center" style="margin-bottom: 20px;"> <img src="https://github.com/user-attachments/assets/75914e72-f1ba-4cd1-97d6-03076495a4d8" width="600" style="margin: 20px 0;" /> </div>
 
 🧪 Example Use Cases
 
